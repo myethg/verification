@@ -12,11 +12,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-CID = os.getenv('CID')
-CSC = os.getenv('CSC') 
-RDU = os.getenv('RDU')
-BTK = os.getenv('BTK')
-VCI = int(os.getenv('VCI'))
+CLIENT_ID = os.getenv('CLIENT_ID')
+CLIENT_SECRET = os.getenv('CLIENT_SECRET') 
+REDIRECT_URI = os.getenv('REDIRECT_URI')
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+VERIFICATION_CHANNEL_ID = int(os.getenv('VERIFICATION_CHANNEL_ID'))
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.default())
 
 @app.route('/')
