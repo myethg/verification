@@ -319,10 +319,27 @@ async def on_ready():
 def run_bot():
     bot.run(BOT_TOKEN)
 
+def get_public_ip():
+    try:
+        response = requests.get('https://api64.ipify.org?format=json', timeout=5)
+        return response.json()['ip']
+    except:
+        try:
+            response = requests.get('https://httpbin.org/ip', timeout=5)
+            return response.json()['origin']
+        except:
+            return None
+
 def run_flask():
     global REDIRECT_URI
     port = int(os.environ.get("PORT", 5000))
-    REDIRECT_URI = f"http://0.0.0.0:{port}/callback"
+    
+    public_ip = get_public_ip()
+    if public_ip:
+        REDIRECT_URI = f"http://{public_ip}:{port}/callback"
+    else:
+        REDIRECT_URI = f"http://localhost:{port}/callback"
+    
     print(f"Setting REDIRECT_URI to: {REDIRECT_URI}")
     app.run(host='0.0.0.0', port=port, debug=False)
 
