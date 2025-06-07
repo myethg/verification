@@ -5,18 +5,20 @@ import requests
 import asyncio
 import threading
 from urllib.parse import urlencode
-
-app = Flask(__name__)
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
+app = Flask(__name__)
+
 CLIENT_ID = os.getenv('CLIENT_ID')
 CLIENT_SECRET = os.getenv('CLIENT_SECRET') 
-REDIRECT_URI = os.getenv('REDIRECT_URI')
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 VERIFICATION_CHANNEL_ID = int(os.getenv('VERIFICATION_CHANNEL_ID'))
+
+REDIRECT_URI = None
+
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.default())
 
 @app.route('/')
@@ -318,7 +320,11 @@ def run_bot():
     bot.run(BOT_TOKEN)
 
 def run_flask():
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    global REDIRECT_URI
+    port = int(os.environ.get("PORT", 5000))
+    REDIRECT_URI = f"http://0.0.0.0:{port}/callback"
+    print(f"Setting REDIRECT_URI to: {REDIRECT_URI}")
+    app.run(host='0.0.0.0', port=port, debug=False)
 
 if __name__ == '__main__':
     bot_thread = threading.Thread(target=run_bot)
